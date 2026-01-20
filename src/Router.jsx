@@ -6,6 +6,7 @@ import ListingDetailsPage from '@/pages/ListingDetailsPage';
 import ListingFavoritesPage from '@/pages/ListingFavoritesPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import SignInPage from '@/pages/SignInPage';
+import SignUpPage from '@/pages/SignUpPage';
 
 import App from './App';
 
@@ -20,6 +21,14 @@ const router = createBrowserRouter([
         element: (
           <Route>
             <SignInPage />
+          </Route>
+        ),
+      },
+      {
+        path: '/signup',
+        element: (
+          <Route>
+            <SignUpPage />
           </Route>
         ),
       },

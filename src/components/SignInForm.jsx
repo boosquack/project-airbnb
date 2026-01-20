@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import * as z from 'zod';
 
 import api from '@/api';
@@ -83,6 +84,13 @@ const SignInForm = () => {
               {errors.root.message}
             </div>
           )}
+
+          <p className='text-center text-sm text-muted-foreground'>
+            Don't have an account?{' '}
+            <Link to='/signup' className='text-primary hover:underline'>
+              Sign up
+            </Link>
+          </p>
         </form>
       </CardContent>
     </Card>

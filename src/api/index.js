@@ -14,7 +14,7 @@ import {
 import { createListing, getListingById, getListings } from './listings';
 import { getLocationById } from './locations';
 import { getReviewsByListingId } from './reviews';
-import { getUser, getUserById } from './users';
+import { createUser, getUser, getUserByEmail, getUserById } from './users';
 
 // Creates a base axios instance
 const api = axios.create({
@@ -147,6 +147,39 @@ adapter.onPost('/api/signin').reply(async (config) => {
   } else {
     return [401, { message: 'Invalid credentials' }];
   }
+});
+
+// Signs up a new user
+adapter.onPost('/api/signup').reply(async (config) => {
+  const { data } = config;
+  const { firstName, lastName, email, password } = JSON.parse(data);
+
+  // Check if user already exists
+  const existingUser = getUserByEmail(email);
+  if (existingUser) {
+    return [400, { message: 'An account with this email already exists' }];
+  }
+
+  // Create new user
+  const user = createUser({ firstName, lastName, email, password });
+
+  // Creates a refresh token based on the user's id
+  const refreshToken = await generateRefreshToken(user.id);
+
+  // Store refresh token in cookie
+  Cookies.set('refreshToken', refreshToken);
+
+  // Creates an access token based on the refresh token
+  const accessToken = await generateAccessToken(refreshToken);
+
+  // Returns access token and user
+  return [
+    200,
+    {
+      accessToken: env.USE_AUTH ? accessToken : null,
+      user: env.USE_AUTH ? cleanUser(user) : null,
+    },
+  ];
 });
 
 // Refreshes the user's access token
