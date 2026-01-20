@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @layer base {
+    :root {
+      --background: 0, 0%, 100%;
+      --foreground: 20, 14.3%, 4.1%;
+
+      --card: 0, 0%, 95%;
+      --card-foreground: 20, 14.3%, 4.1%;
+
+      --popover: 0, 0%, 100%;
+      --popover-foreground: 20, 14.3%, 4.1%;
+
+      --primary: 20, 14.3%, 4.1%;
+      --primary-darker: 20, 14.3%, 4.1%;
+      --primary-foreground: 60, 9.1%, 97.8%;
+
+      --secondary: 0, 0%, 85%;
+      --secondary-foreground: 24, 9.8%, 10%;
+
+      --muted: 0, 0%, 85%;
+      --muted-foreground: 25, 5.3%, 44.7%;
+
+      --accent: 0, 0%, 85%;
+      --accent-foreground: 24, 9.8%, 10%;
+
+      --destructive: 0, 84.2%, 60.2%;
+      --destructive-foreground: 60, 9.1%, 97.8%;
+
+      --border: 20, 5.9%, 90%;
+      --input: 20, 5.9%, 90%;
+      --ring: 20, 14.3%, 4.1%;
+      --star: 39, 89%, 67%;
+
+      --radius: 0.5rem;
+    }
+
+    .dark {
+      --background: 0, 0%, 10%;
+      --foreground: 60, 9.1%, 97.8%;
+
+      --card: 0, 0%, 15%;
+      --card-foreground: 60, 9.1%, 97.8%;
+
+      --popover: 20, 14.3%, 4.1%;
+      --popover-foreground: 60, 9.1%, 97.8%;
+
+      --primary: 53, 81%, 90%;
+      --primary-darker: 31, 32%, 48%;
+      --primary-foreground: 20, 14.3%, 4.1%;
+
+      --secondary: 0, 0%, 20%;
+      --secondary-foreground: 60, 9.1%, 97.8%;
+
+      --muted: 0, 0%, 15%;
+      --muted-foreground: 24, 5.4%, 63.9%;
+
+      --accent: 0, 0%, 15%;
+      --accent-foreground: 60, 9.1%, 97.8%;
+
+      --destructive: 0, 62.8%, 30.6%;
+      --destructive-foreground: 60, 9.1%, 97.8%;
+
+      --border: 0, 0%, 20%;
+      --input: 0, 0%, 20%;
+      --ring: 35.5, 91.7%, 32.9%;
+      --star: 39, 89%, 67%;
+    }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  h1 {
+    @apply mb-4 text-4xl font-bold;
+  }
+
+  h2 {
+    @apply mb-2 text-3xl font-bold;
+  }
+
+  h3 {
+    @apply mb-2 text-2xl font-bold;
+  }
+
+  p {
+    @apply mb-4;
+  }
+
+  ol {
+    @apply mb-2 list-inside list-decimal;
+  }
+
+  li {
+    @apply mb-2 list-inside list-disc;
+  }
+
+  p {
+    @apply mb-4;
+  }
+
+  :not(pre) > code {
+    @apply rounded bg-secondary px-1 font-normal text-secondary-foreground;
+  }
+}
