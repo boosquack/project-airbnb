@@ -8,12 +8,29 @@ import {
   cleanUser,
   generateAccessToken,
   generateRefreshToken,
+  getUserIdFromToken,
   verifyToken,
   withAuth,
 } from './helpers';
-import { createListing, getListingById, getListings } from './listings';
+import {
+  cancelBooking,
+  createBooking,
+  getBookingsByUserId,
+} from './bookings';
+import {
+  createListing,
+  getFeaturedListings,
+  getListingById,
+  getListings,
+  getPublicListings,
+} from './listings';
 import { getLocationById } from './locations';
-import { getReviewsByListingId } from './reviews';
+import {
+  createReview,
+  deleteReview,
+  getReviewsByListingId,
+  updateReview,
+} from './reviews';
 import { createUser, getUser, getUserByEmail, getUserById } from './users';
 
 // Creates a base axios instance
@@ -83,6 +100,165 @@ adapter.onGet('/api/reviews').reply(
     return [200, reviews];
   }),
 );
+
+// Creates a review
+adapter.onPost('/api/reviews').reply(
+  withAuth(async (config) => {
+    const accessToken = config.headers.Authorization?.split(' ')[1];
+    const userId = await getUserIdFromToken(accessToken);
+
+    if (!userId) {
+      return [403, { message: 'Unauthorized' }];
+    }
+
+    const { listingId, rating, comment } = JSON.parse(config.data);
+
+    const review = createReview({
+      userId,
+      listingId,
+      rating,
+      comment,
+    });
+
+    return [201, review];
+  }),
+);
+
+// Updates a review
+adapter.onPut(/\/api\/reviews\/\d+/).reply(
+  withAuth(async (config) => {
+    const accessToken = config.headers.Authorization?.split(' ')[1];
+    const userId = await getUserIdFromToken(accessToken);
+
+    if (!userId) {
+      return [403, { message: 'Unauthorized' }];
+    }
+
+    const id = parseInt(config.url.match(/\/api\/reviews\/(\d+)/)[1]);
+    const { rating, comment } = JSON.parse(config.data);
+
+    const review = updateReview(id, userId, { rating, comment });
+
+    if (!review) {
+      return [404, { message: 'Review not found or unauthorized' }];
+    }
+
+    return [200, review];
+  }),
+);
+
+// Deletes a review
+adapter.onDelete(/\/api\/reviews\/\d+/).reply(
+  withAuth(async (config) => {
+    const accessToken = config.headers.Authorization?.split(' ')[1];
+    const userId = await getUserIdFromToken(accessToken);
+
+    if (!userId) {
+      return [403, { message: 'Unauthorized' }];
+    }
+
+    const id = parseInt(config.url.match(/\/api\/reviews\/(\d+)/)[1]);
+
+    const deleted = deleteReview(id, userId);
+
+    if (!deleted) {
+      return [404, { message: 'Review not found or unauthorized' }];
+    }
+
+    return [200, { message: 'Review deleted' }];
+  }),
+);
+
+// Gets user's bookings
+adapter.onGet('/api/bookings').reply(
+  withAuth(async (config) => {
+    const accessToken = config.headers.Authorization?.split(' ')[1];
+    const userId = await getUserIdFromToken(accessToken);
+
+    if (!userId) {
+      return [403, { message: 'Unauthorized' }];
+    }
+
+    const bookings = getBookingsByUserId(userId);
+
+    return [200, bookings];
+  }),
+);
+
+// Creates a booking
+adapter.onPost('/api/bookings').reply(
+  withAuth(async (config) => {
+    const accessToken = config.headers.Authorization?.split(' ')[1];
+    const userId = await getUserIdFromToken(accessToken);
+
+    if (!userId) {
+      return [403, { message: 'Unauthorized' }];
+    }
+
+    const { listingId, checkIn, checkOut, guests, totalPrice } = JSON.parse(
+      config.data
+    );
+
+    const booking = createBooking({
+      userId,
+      listingId,
+      checkIn,
+      checkOut,
+      guests,
+      totalPrice,
+    });
+
+    return [201, booking];
+  }),
+);
+
+// Cancels a booking
+adapter.onDelete(/\/api\/bookings\/\d+/).reply(
+  withAuth(async (config) => {
+    const accessToken = config.headers.Authorization?.split(' ')[1];
+    const userId = await getUserIdFromToken(accessToken);
+
+    if (!userId) {
+      return [403, { message: 'Unauthorized' }];
+    }
+
+    const id = parseInt(config.url.match(/\/api\/bookings\/(\d+)/)[1]);
+
+    const booking = cancelBooking(id, userId);
+
+    if (!booking) {
+      return [404, { message: 'Booking not found or unauthorized' }];
+    }
+
+    return [200, booking];
+  }),
+);
+
+// Gets featured listings (public, no auth required)
+adapter.onGet('/api/listings/featured').reply(async () => {
+  const listings = getFeaturedListings(6);
+
+  const domainListings = listings.map((listing) => {
+    const location = getLocationById(listing.locationId);
+    return { ...listing, location };
+  });
+
+  return [200, domainListings];
+});
+
+// Gets public listings (no auth required)
+adapter.onGet('/api/listings/public').reply(async (config) => {
+  const { params } = config;
+
+  const listings = getPublicListings(params);
+
+  const domainListings = listings.map((listing) => {
+    const location = getLocationById(listing.locationId);
+    return { ...listing, location };
+  });
+
+  return [200, domainListings];
+});
 
 // Gets the current user
 adapter.onGet('/api/me').reply(

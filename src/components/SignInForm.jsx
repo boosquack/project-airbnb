@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import * as z from 'zod';
 
 import api from '@/api';
@@ -20,7 +20,11 @@ const signInFormSchema = z.object({
 });
 
 const SignInForm = () => {
-  const { setToken } = useAuth();
+  const { setToken, setUser } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const redirectTo = searchParams.get('redirect') || '/listings';
 
   const {
     formState: { errors, isSubmitting },
@@ -35,6 +39,8 @@ const SignInForm = () => {
     try {
       const response = await api.post('/api/signin', data);
       setToken(response.data.accessToken);
+      setUser(response.data.user);
+      navigate(redirectTo, { replace: true });
     } catch (e) {
       setError('root', {
         message: e.response.data.message,

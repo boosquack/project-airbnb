@@ -67,3 +67,20 @@ export const generateAccessToken = async (data) => {
     .setExpirationTime('15m')
     .sign(jwtSecret);
 };
+
+// Extracts user ID from access token
+export const getUserIdFromToken = async (token) => {
+  try {
+    const accessTokenPayload = await verifyToken(token, { returnPayload: true });
+    if (!accessTokenPayload) return null;
+
+    const refreshTokenPayload = await verifyToken(accessTokenPayload.data, {
+      returnPayload: true,
+    });
+    if (!refreshTokenPayload) return null;
+
+    return refreshTokenPayload.data;
+  } catch {
+    return null;
+  }
+};

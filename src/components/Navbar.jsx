@@ -26,8 +26,9 @@ const Navbar = () => {
   return (
     <>
       <div className='flex flex-row items-center justify-between gap-8 px-8 py-4'>
-        <Link to='/'>Home</Link>
+        <Link to='/listings'>Listings</Link>
         <div className='flex-end flex flex-row items-center gap-8'>
+          <Link to='/bookings'>My Bookings</Link>
           <Link to='/favorites'>Favorites</Link>
 
           <DropdownMenu>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import ListingCardImages from '@/components/ListingCardImages';
 import ListingFavoriteButton from '@/components/ListingFavoriteButton';
+import { StarRatingDisplay } from '@/components/reviews';
 import { Card, CardContent } from '@/components/ui';
 
 const ListingCard = ({ listing }) => {
@@ -17,7 +18,10 @@ const ListingCard = ({ listing }) => {
           />
         </div>
         <CardContent className='flex flex-col gap-2 p-4'>
-          <h2 className='mb-2 text-xl font-semibold'>{listing.name}</h2>
+          <div className='flex items-center justify-between mb-2'>
+            <h2 className='text-xl font-semibold'>{listing.name}</h2>
+            <StarRatingDisplay rating={listing.rating} size="sm" />
+          </div>
           <div className='flex items-center gap-2'>
             <DollarSign className='h-4 w-4 text-primary' />
             <span className='text-muted-foreground'>

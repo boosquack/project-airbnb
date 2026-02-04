@@ -1,6 +1,7 @@
 import { env } from '@/lib/env';
 import { getItem, setItem } from '@/lib/utils/localStorage';
 
+import { bookings } from './bookings';
 import { listings } from './listings';
 import { locations } from './locations';
 import { reviews } from './reviews';
@@ -17,6 +18,7 @@ export const seedLocalDatabase = () => {
 
   // Creates the initial database with all data
   const initialDatabase = {
+    bookings,
     listings,
     locations,
     users,

@@ -3,10 +3,10 @@ import { memo, useState } from 'react';
 
 import { Button, DateRangePicker, Input, Stepper } from '@/components/ui';
 
-const ListingFilters = ({ onChange }) => {
+const ListingFilters = ({ onChange, initialSearch = '' }) => {
   const [dates, setDates] = useState();
   const [guests, setGuests] = useState(0);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(initialSearch);
 
   const handleSubmit = () => {
     onChange({ dates, guests, search });

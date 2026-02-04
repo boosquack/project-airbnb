@@ -22,14 +22,17 @@ export const useAuth = () => {
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchMe = async () => {
       try {
         const response = await api.get('/api/me');
         setToken(response.data.accessToken);
+        setUser(response.data.user);
       } catch {
         setToken(null);
+        setUser(null);
       }
     };
 
@@ -84,7 +87,7 @@ const AuthProvider = ({ children }) => {
   }, [token]);
 
   return (
-    <AuthContext.Provider value={{ token, setToken }}>
+    <AuthContext.Provider value={{ token, setToken, user, setUser }}>
       {children}
     </AuthContext.Provider>
   );

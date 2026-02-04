@@ -72,3 +72,34 @@ export const createListing = (data) => {
 
   return newListing;
 };
+
+// Gets featured/top-rated listings (public, no auth)
+export const getFeaturedListings = (limit = 6) => {
+  const listings = getDatabaseTable('listings');
+  if (!listings) {
+    return [];
+  }
+
+  // Sort by rating and return top listings
+  return [...listings].sort((a, b) => b.rating - a.rating).slice(0, limit);
+};
+
+// Gets public listings with search (no auth required)
+export const getPublicListings = (params = {}) => {
+  const { search, limit = 12 } = params;
+
+  const listings = getDatabaseTable('listings');
+  if (!listings) {
+    return [];
+  }
+
+  let filteredListings = listings;
+
+  if (search) {
+    filteredListings = filteredListings.filter((listing) =>
+      listing.name.toLowerCase().includes(search.toLowerCase())
+    );
+  }
+
+  return filteredListings.slice(0, limit);
+};

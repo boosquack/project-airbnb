@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as z from 'zod';
 
 import api from '@/api';
@@ -28,7 +28,8 @@ const signUpFormSchema = z
   });
 
 const SignUpForm = () => {
-  const { setToken } = useAuth();
+  const { setToken, setUser } = useAuth();
+  const navigate = useNavigate();
 
   const {
     formState: { errors, isSubmitting },
@@ -48,6 +49,8 @@ const SignUpForm = () => {
         password: data.password,
       });
       setToken(response.data.accessToken);
+      setUser(response.data.user);
+      navigate('/listings', { replace: true });
     } catch (e) {
       setError('root', {
         message: e.response?.data?.message || 'Something went wrong',
