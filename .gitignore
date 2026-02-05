@@ -26,4 +26,6 @@ dist-ssr
 *.sw?
 .vercel
 
-.vercel
+# Claude Code instructions
+CLAUDE.md
+.claude/
