@@ -1,0 +1,3 @@
+*.cjs linguist-vendored
+postcss.config.js linguist-vendored
+tailwind.config.js linguist-vendored
