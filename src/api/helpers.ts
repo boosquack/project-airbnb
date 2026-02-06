@@ -6,7 +6,7 @@ import { getItem, setItem } from '@/lib/utils/localStorage';
 
 import type { Database } from './data/seed';
 
-const JWT_SECRET_KEY = 'cosdensolutions';
+const JWT_SECRET_KEY = 'airnbook-jwt-secret';
 const jwtSecret = new TextEncoder().encode(JWT_SECRET_KEY);
 
 // Waits for a given number of milliseconds

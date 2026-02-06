@@ -40,10 +40,10 @@ export const users: User[] = [
     My home is a cozy and welcoming place, meticulously maintained and equipped with all the amenities for your convenience. I believe in creating a homely atmosphere for my guests where they can relax and feel at home.
 
     I am looking forward to hosting you and providing you the best experience. Welcome to our city and enjoy your stay!`,
-    email: 'demo@cosdensolutions.io',
+    email: 'demo@airnbook.com',
     firstName: 'Demo',
-    lastName: 'Account',
-    initials: 'DA',
-    password: 'cosdensolutions',
+    lastName: 'User',
+    initials: 'DU',
+    password: 'demo1234',
   }),
 ];
