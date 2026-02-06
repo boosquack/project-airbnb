@@ -1,6 +1,9 @@
+import { Lock, MessageSquare } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 
+import { useAuth } from '@/components/AuthProvider';
 import { Button, TextArea } from '@/components/ui';
 import type { Review } from '@/types';
 import type { AppDispatch, RootState } from '@/state/store';
@@ -27,6 +30,8 @@ const ReviewForm = ({
   onSuccess,
 }: ReviewFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
+  const location = useLocation();
+  const { token } = useAuth();
   const { createStatus, updateStatus, deleteStatus } = useSelector(
     (state: RootState) => state.reviews
   );
@@ -35,6 +40,7 @@ const ReviewForm = ({
   const [comment, setComment] = useState(existingReview?.comment || '');
   const [error, setError] = useState('');
 
+  const isAuthenticated = !!token;
   const isEditing = !!existingReview;
   const isSubmitting =
     createStatus === 'loading' || updateStatus === 'loading';
@@ -107,9 +113,44 @@ const ReviewForm = ({
     }
   };
 
+  // Show sign-in prompt for unauthenticated users
+  if (!isAuthenticated) {
+    return (
+      <div className="rounded-xl border border-border p-6 bg-muted/30">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <MessageSquare className="w-6 h-6 text-primary" />
+          </div>
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold font-display mb-2">Share your experience</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Sign in to write a review and help others discover great places to stay.
+            </p>
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-background text-sm text-muted-foreground mb-4">
+              <Lock className="w-4 h-4 flex-shrink-0" />
+              <span>You need to be signed in to leave a review</span>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button asChild className="rounded-full">
+                <Link to={`/signin?redirect=${encodeURIComponent(location.pathname)}`}>
+                  Sign In
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="rounded-full">
+                <Link to={`/signup?redirect=${encodeURIComponent(location.pathname)}`}>
+                  Create Account
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <h3 className="text-lg font-semibold">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <h3 className="text-lg font-semibold font-display">
         {isEditing ? 'Edit your review' : 'Write a review'}
       </h3>
 
@@ -129,13 +170,14 @@ const ReviewForm = ({
           placeholder="Share your experience with this listing..."
           disabled={isSubmitting}
           rows={4}
+          className="resize-none"
         />
       </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
-      <div className="flex gap-2">
-        <Button type="submit" disabled={isSubmitting}>
+      <div className="flex gap-3">
+        <Button type="submit" disabled={isSubmitting} className="rounded-full">
           {isSubmitting
             ? 'Submitting...'
             : isEditing
@@ -148,6 +190,7 @@ const ReviewForm = ({
             variant="destructive"
             onClick={handleDelete}
             disabled={isDeleting}
+            className="rounded-full"
           >
             {isDeleting ? 'Deleting...' : 'Delete Review'}
           </Button>

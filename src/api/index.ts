@@ -41,45 +41,41 @@ const api = axios.create({
 // Creates a mock adapter for axios
 const adapter = new MockAdapter(api, { delayResponse: 1000 });
 
-// Gets a single listing
-adapter.onGet(/\/api\/listings\/\d+/).reply(
-  withAuth(async (config) => {
-    const match = config.url?.match(/\/api\/listings\/(\d+)/);
-    if (!match) return [400, { message: 'Invalid request' }];
-    const id = parseInt(match[1]);
+// Gets a single listing (public - no auth required)
+adapter.onGet(/\/api\/listings\/\d+/).reply(async (config) => {
+  const match = config.url?.match(/\/api\/listings\/(\d+)/);
+  if (!match) return [400, { message: 'Invalid request' }];
+  const id = parseInt(match[1]);
 
-    // Gets listing by id
-    const listing = getListingById(id);
-    if (!listing) {
-      return [404, { message: 'Listing not found' }];
-    }
+  // Gets listing by id
+  const listing = getListingById(id);
+  if (!listing) {
+    return [404, { message: 'Listing not found' }];
+  }
 
+  const location = getLocationById(listing.locationId);
+  if (!location) {
+    return [404, { message: 'Location not found' }];
+  }
+
+  return [200, { ...listing, location }];
+});
+
+// Gets all listings (public - no auth required)
+adapter.onGet('/api/listings').reply(async (config) => {
+  const { params } = config;
+
+  // Gets all listings with optional filters
+  const listings = getListings(params);
+
+  // Maps over listings and adds location
+  const domainListings = listings.map((listing) => {
     const location = getLocationById(listing.locationId);
-    if (!location) {
-      return [404, { message: 'Location not found' }];
-    }
+    return { ...listing, location };
+  });
 
-    return [200, { ...listing, location }];
-  })
-);
-
-// Gets all listings
-adapter.onGet('/api/listings').reply(
-  withAuth(async (config) => {
-    const { params } = config;
-
-    // Gets all listings with optional filters
-    const listings = getListings(params);
-
-    // Maps over listings and adds location
-    const domainListings = listings.map((listing) => {
-      const location = getLocationById(listing.locationId);
-      return { ...listing, location };
-    });
-
-    return [200, domainListings];
-  })
-);
+  return [200, domainListings];
+});
 
 // Creates a listing
 adapter.onPost('/api/listings').reply(
@@ -92,16 +88,14 @@ adapter.onPost('/api/listings').reply(
   })
 );
 
-// Gets reviews for a listing
-adapter.onGet('/api/reviews').reply(
-  withAuth(async (config) => {
-    const { params } = config;
+// Gets reviews for a listing (public - no auth required)
+adapter.onGet('/api/reviews').reply(async (config) => {
+  const { params } = config;
 
-    const reviews = getReviewsByListingId(params?.listingId);
+  const reviews = getReviewsByListingId(params?.listingId);
 
-    return [200, reviews];
-  })
-);
+  return [200, reviews];
+});
 
 // Creates a review
 adapter.onPost('/api/reviews').reply(

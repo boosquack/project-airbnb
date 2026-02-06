@@ -39,22 +39,17 @@ const router = createBrowserRouter([
         ),
       },
       {
+        // Public - anyone can browse listings
         path: '/listings',
-        element: (
-          <Route isProtected>
-            <ListingsPage />
-          </Route>
-        ),
+        element: <ListingsPage />,
       },
       {
+        // Public - anyone can view listing details
         path: '/listings/:listingId',
-        element: (
-          <Route isProtected>
-            <ListingDetailsPage />
-          </Route>
-        ),
+        element: <ListingDetailsPage />,
       },
       {
+        // Protected - only logged in users can see favorites
         path: '/favorites',
         element: (
           <Route isProtected>
@@ -63,6 +58,7 @@ const router = createBrowserRouter([
         ),
       },
       {
+        // Protected - only logged in users can see bookings
         path: '/bookings',
         element: (
           <Route isProtected>

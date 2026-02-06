@@ -11,49 +11,54 @@ const features: Feature[] = [
   {
     icon: Home,
     title: 'Unique Stays',
-    description: 'From city apartments to countryside retreats, find the perfect accommodation for any trip.',
+    description: 'Hand-picked properties from cozy apartments to luxury villas, each with its own character.',
   },
   {
     icon: Shield,
     title: 'Verified Hosts',
-    description: 'All our hosts are verified to ensure your safety and a great experience every time.',
+    description: 'Every host is verified and reviewed to ensure your safety and peace of mind.',
   },
   {
     icon: Star,
-    title: 'Top-Rated Experiences',
-    description: 'Read honest reviews from real guests to find the best places to stay.',
+    title: 'Trusted Reviews',
+    description: 'Read authentic reviews from real guests to find the perfect place for your trip.',
   },
   {
     icon: CreditCard,
-    title: 'Secure Payments',
-    description: 'Book with confidence knowing your payment information is always protected.',
+    title: 'Secure Booking',
+    description: 'Your payment and personal information is always protected with bank-level security.',
   },
 ];
 
 const ValuePropositions = () => {
   return (
-    <section className="py-16 bg-muted/30">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Why Choose Us</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            We make it easy to find and book unique stays around the world.
+    <section className="py-20 lg:py-28">
+      <div className="container mx-auto px-6 lg:px-8">
+        <div className="text-center mb-14">
+          <p className="text-primary font-medium mb-2 tracking-wide uppercase text-sm">
+            Why choose us
+          </p>
+          <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight mb-4">
+            Travel with Confidence
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-0">
+            We make finding and booking your perfect stay simple, safe, and enjoyable
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
               <div
                 key={index}
-                className="flex flex-col items-center text-center p-6"
+                className="group text-center p-6 rounded-2xl hover:bg-muted/50 transition-colors"
               >
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <Icon className="h-7 w-7 text-primary" />
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5 group-hover:bg-primary/20 group-hover:scale-110 transition-all">
+                  <Icon className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="font-semibold text-lg mb-2 font-display">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-0">
                   {feature.description}
                 </p>
               </div>

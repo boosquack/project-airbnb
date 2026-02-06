@@ -15,11 +15,9 @@ const ListingDetailsPage = () => {
   } = useFetch<ListingWithLocation>(`/api/listings/${listingId}`);
 
   return (
-    <div className='container py-4'>
-      <DataRenderer error={error} isLoading={isLoading}>
-        <ListingDetailsCard listing={listing} />
-      </DataRenderer>
-    </div>
+    <DataRenderer error={error} isLoading={isLoading}>
+      <ListingDetailsCard listing={listing} />
+    </DataRenderer>
   );
 };
 

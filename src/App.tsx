@@ -8,7 +8,10 @@ const App = () => {
   const location = useLocation();
 
   const isLandingPage = location.pathname === '/';
-  const showNavbar = token && !isLandingPage;
+  const isAuthPage = location.pathname === '/signin' || location.pathname === '/signup';
+
+  // Show navbar on all pages except landing and auth pages
+  const showNavbar = !isLandingPage && !isAuthPage;
 
   return (
     <>

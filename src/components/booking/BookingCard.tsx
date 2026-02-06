@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { Button, Card, CardContent, CardFooter } from '@/components/ui';
 import { cn } from '@/lib/utils/cn';
+import { getImageUrl } from '@/lib/utils/images';
 import type { Booking, BookingStatus, ListingWithLocation } from '@/types';
 
 const statusStyles: Record<BookingStatus, string> = {
@@ -31,7 +32,7 @@ const BookingCard = ({ booking, listing, onCancel }: BookingCardProps) => {
         {listing?.images?.[0] && (
           <div className="h-32 w-full flex-shrink-0 md:h-auto md:w-48">
             <img
-              src={`/images/${listing.images[0]}`}
+              src={getImageUrl(listing.images[0])}
               alt={listing.name}
               className="h-full w-full object-cover"
             />
